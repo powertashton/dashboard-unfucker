@@ -695,7 +695,8 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       } else { configPreferences = JSON.parse(localStorage.getItem("configPreferences")); }
     };
     const ownName = $("#account_subnav").find($(keyToCss("displayName"))).eq(0).text();
-    const blogs = unsafeWindow.___INITIAL_STATE___.queries.queries[0].state.data.user.blogs;
+
+    const blogs = JSON.parse(unsafeWindow.___INITIAL_STATE___.textContent).queries.queries[0].state.data.user.blogs;
     let $navigationLinks = $(keyToCss("navigationLinks"));
     let $content = {};
     let $headerWrapper = $("<nav>", { class: keyToClasses("headerWrapper").join(" "), id: "__hw" });
@@ -774,43 +775,43 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
             </li>
             <li>
               <span>hide dashboard tabs</span>
-              <input class="configInput" type="checkbox" id="__c1" name="0" ${configPreferences[0].value}>
+              <input class="configInput" type="checkbox" id="__c1" name="0" ${configPreferences[0]}>
             </li>
             <li>
               <span>hide recommended blogs</span>
-              <input class="configInput" type="checkbox" id="__c2" name="1" ${configPreferences[1].value}>
+              <input class="configInput" type="checkbox" id="__c2" name="1" ${configPreferences[1]}>
             </li>
             <li>
               <span>hide tumblr radar</span>
-              <input class="configInput" type="checkbox" id="__c3" name="2" ${configPreferences[2].value}>
+              <input class="configInput" type="checkbox" id="__c3" name="2" ${configPreferences[2]}>
             </li>
             <li>
               <span>hide explore</span>
-              <input class="configInput" type="checkbox" id="__c4" name="3" ${configPreferences[3].value}>
+              <input class="configInput" type="checkbox" id="__c4" name="3" ${configPreferences[3]}>
             </li>
             <li>
               <span>hide tumblr shop</span>
-              <input class="configInput" type="checkbox" id="__c5" name="4" ${configPreferences[4].value}>
+              <input class="configInput" type="checkbox" id="__c5" name="4" ${configPreferences[4]}>
             </li>
             <li>
               <span>hide tumblr live</span>
-              <input class="configInput" type="checkbox" id="__c6" name="5" ${configPreferences[5].value}>
+              <input class="configInput" type="checkbox" id="__c6" name="5" ${configPreferences[5]}>
             </li>
             <li>
               <span>hide domains</span>
-              <input class="configInput" type="checkbox" id="__c7" name="6" ${configPreferences[6].value}>
+              <input class="configInput" type="checkbox" id="__c7" name="6" ${configPreferences[6]}>
             </li>
             <li>
               <span>hide ad-free</span>
-              <input class="configInput" type="checkbox" id="__c8" name="7" ${configPreferences[7].value}>
+              <input class="configInput" type="checkbox" id="__c8" name="7" ${configPreferences[7]}>
             </li>
             <li>
               <span>content positioning</span>
-              <input class="configInput" type="range" id="__c9" name="8" min="-500" max="500" step="1" value="${configPreferences[8].value}">
+              <input class="configInput" type="range" id="__c9" name="8" min="-500" max="500" step="1" value="${configPreferences[8]}">
             </li>
             <li>
               <span>revert post header changes</span>
-              <input class="configInput" type="checkbox" id="__c10" name="9" ${configPreferences[9].value}>
+              <input class="configInput" type="checkbox" id="__c10" name="9" ${configPreferences[9]}>
             </li>
           </ul>
         </div>
@@ -863,21 +864,21 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       }
     });
 
-    $timelineHeader.toggle(!configPreferences[0].value); //initialize preferences
-    $navItems.has('use[href="#managed-icon__explore"]').toggle(!configPreferences[3].value);
-    $navItems.has('use[href="#managed-icon__shop"]').toggle(!configPreferences[4].value);
+    $timelineHeader.toggle(!configPreferences[0]); //initialize preferences
+    $navItems.has('use[href="#managed-icon__explore"]').toggle(!configPreferences[3]);
+    $navItems.has('use[href="#managed-icon__shop"]').toggle(!configPreferences[4]);
     $navItems.has('use[href="#managed-icon__live-video"]')
       .add($navItems.has('use[href="#managed-icon__coins"]'))
       .add($(keyToCss("listTimelineObject"))
-      .has(keyToCss("liveMarqueeTitle"))).toggle(!configPreferences[5].value);
-    $navItems.has('use[href="#managed-icon__earth"]').toggle(!configPreferences[6].value);
-    $navItems.has('use[href="#managed-icon__sparkle"]').toggle(!configPreferences[7].value);
+      .has(keyToCss("liveMarqueeTitle"))).toggle(!configPreferences[5]);
+    $navItems.has('use[href="#managed-icon__earth"]').toggle(!configPreferences[6]);
+    $navItems.has('use[href="#managed-icon__sparkle"]').toggle(!configPreferences[7]);
     if ($main.length 
       && matchPathname() 
       && !["search", "tagged"].includes(pathname)) {
-      $main.css("margin-left", `${configPreferences[8].value}px`);
+      $main.css("margin-left", `${configPreferences[8]}px`);
     } 
-    if (configPreferences[9].value && headerFixTarget()) {
+    if (configPreferences[9] && headerFixTarget()) {
       fixHeader($(postSelector));
       observer.observe(target, { childList: true, subtree: true });
     } else observer.disconnect;
@@ -889,9 +890,9 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
         let $search = $(keyToCss("searchSidebarItem"));
         $search.insertAfter($logoContainer);
         waitFor(keyToCss("recommendedBlogs")).then(() => { //loads slower than other items
-          $(keyToCss("sidebarItem")).has(keyToCss("recommendedBlogs")).toggle(!configPreferences[1].value);
+          $(keyToCss("sidebarItem")).has(keyToCss("recommendedBlogs")).toggle(!configPreferences[1]);
         })
-        $(keyToCss("sidebarItem")).has(keyToCss("radar")).toggle(!configPreferences[2].value);
+        $(keyToCss("sidebarItem")).has(keyToCss("radar")).toggle(!configPreferences[2]);
       });
       if (isDashboard()) { //reorder tabs for accounts made after 8 may 2023
         waitFor(keyToCss("timelineOptionsItemWrapper")).then(() => {
