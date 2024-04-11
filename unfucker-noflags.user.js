@@ -6,6 +6,8 @@
 // @match        https://www.tumblr.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tumblr.com
 // @grant        unsafeWindow
+// @downloadURL  https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker-noflags.user.js
+// @updateURL    https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker-noflags.user.js
 // @require      https://code.jquery.com/jquery-3.6.4.min.js
 // ==/UserScript==
 
