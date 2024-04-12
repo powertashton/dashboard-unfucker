@@ -8,7 +8,6 @@
 // @downloadURL  https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
 // @updateURL    https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
 // @require      https://code.jquery.com/jquery-3.6.4.min.js
-// @require      https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker-noflags.user.js
 // @grant        unsafeWindow
 // @run-at       document-start
 // ==/UserScript==
