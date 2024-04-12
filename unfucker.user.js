@@ -8,6 +8,7 @@
 // @downloadURL  https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
 // @updateURL    https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
 // @require      https://code.jquery.com/jquery-3.6.4.min.js
+// @require      https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker-noflags.user.js
 // @grant        unsafeWindow
 // @run-at       document-start
 // ==/UserScript==
@@ -957,16 +958,7 @@ const main = async function (nonce) {
           });
         });
       };
-      const addUserPortrait = () => {
-        const bar = $(`${keyToCss('postColumn')} > ${keyToCss('bar')}`);
-        if (bar) {
-          const userAvatarWrapper = $str('<div class="__userAvatarWrapper"></div>');
-          bar.prepend(userAvatarWrapper);
-          if (pathname === 'blog') userAvatarWrapper.append(userAvatar(location.pathname.split('/')[2]));
-          else userAvatarWrapper.append(userAvatar(userName));
-          blogViewLink(userAvatarWrapper);
-        }
-      };
+
 
       const fixMasonryNotes = noteCounts => {
         for (const noteCount of noteCounts) {
