@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         dashboard unfucker
-// @version      6.0.0
+// @version      5.7.1
 // @description  no more shitty twitter ui for pc
 // @author       dragongirlsnout
 // @match        https://www.tumblr.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tumblr.com
-// @downloadURL  https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker.user.js
-// @updateURL    https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker.user.js
+// @downloadURL  https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
+// @updateURL    https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
 // @require      https://code.jquery.com/jquery-3.6.4.min.js
-// @grant        unsafeWindow
+// @grant        none
 // @run-at       document-start
 // ==/UserScript==
 
@@ -16,7 +16,7 @@
 const $ = window.jQuery;
 
 const main = async function (nonce) {
-  const version = '6.0.0';
+  const version = '5.7.1';
   const match = [
     '',
     'dashboard',
@@ -31,7 +31,7 @@ const main = async function (nonce) {
     'explore',
     'reblog'
   ];
-  let state = window.__INITIAL_STATE__ ?? {};
+  let state = window.___INITIAL_STATE___;
   let configPreferences = {
     lastVersion: version,
     showCta: true,
@@ -164,7 +164,6 @@ const main = async function (nonce) {
     const keyToClasses = (...keys) => keys.flatMap(key => cssMap[key]).filter(Boolean);
     const keyToCss = (...keys) => `:is(${keyToClasses(...keys).map(className => `.${className}`).join(', ')})`;
     const tr = string => `${window.tumblr.languageData.translations[string] || string}`;
-    console.log('g');
     return { keyToClasses, keyToCss, tr };
   };
   const style = $str(`
@@ -218,16 +217,14 @@ const main = async function (nonce) {
       }
       content = JSON.stringify(content);
     }
-    console.log('fd');
     return new Response(content, {
       status: response.status,
       statusText: response.statusText,
       headers: response.headers
     });
   };
-  
+
   if (storageAvailable('localStorage')) {
-    
     if (!window.localStorage.getItem('configPreferences') || Array.isArray(JSON.parse(window.localStorage.getItem('configPreferences')))) {
       updatePreferences();
       console.log('initialized preferences');
@@ -252,16 +249,12 @@ const main = async function (nonce) {
   }
 
   const modifyInitialTimeline = (obj, context) => {
-    console.log('dash');
     if (!obj || !configPreferences.showNsfwPosts.value) return obj;
     else if (context === 'dashboard') {
-      console.log('dash');
       obj.dashboardTimeline.response.timeline.elements.forEach(function (post) { post.isNsfw = false; });
     } else if (context === 'peepr') {
-      console.log('peep');
       obj.initialTimeline.objects.forEach(function (post) { post.isNsfw = false; });
     }
-    
     console.log(obj);
     return obj;
   };
@@ -278,39 +271,35 @@ const main = async function (nonce) {
     { name: 'crowdsignalPollsCreate', value: true },
     { name: 'adFreeCtaBanner', value: false }
   ];
-  
-  // Object.defineProperty(window, '___INITIAL_STATE___', { // thanks twilight-sparkle-irl!
-  //   set (x) {
-  //     state = x;
-  //   },
-  //   get () {
-  //     try {
-  //       console.log('state');
-  //       console.log(state);
-  //       return {
-  //         ...state,
-  //         Dashboard: modifyInitialTimeline(state.Dashboard, 'dashboard'),
-  //         PeeprRoute: modifyInitialTimeline(state.PeeprRoute, 'peepr')//,
-  //         // obfuscatedFeatures: modifyObfuscatedFeatures(state.obfuscatedFeatures, featureSet)
-  //       };
-  //     } catch (e) {
-  //       console.error('Failed to modify features', e);
-  //     }
-  //     return state;
-  //   },
-  //   enumerable: true,
-  //   configurable: true
-  // });
+  Object.defineProperty(window, '___INITIAL_STATE___', { // thanks twilight-sparkle-irl!
+    set (x) {
+      state = x;
+    },
+    get () {
+      try {
+        return {
+          ...state,
+          Dashboard: modifyInitialTimeline(state.Dashboard, 'dashboard'),
+          PeeprRoute: modifyInitialTimeline(state.PeeprRoute, 'peepr')//,
+          // obfuscatedFeatures: modifyObfuscatedFeatures(state.obfuscatedFeatures, featureSet)
+        };
+      } catch (e) {
+        console.error('Failed to modify features', e);
+      }
+      return state;
+    },
+    enumerable: true,
+    configurable: true
+  });
   document.head.appendChild(style);
   document.addEventListener('DOMContentLoaded', () => {
     getUtilities().then(({ keyToCss, keyToClasses, tr }) => {
       let windowWidth = window.innerWidth;
       let safeOffset = (windowWidth - 1000) / 2;
-      console.log('h');
       if (Math.abs(configPreferences.contentPositioning.value) > safeOffset) configPreferences.contentPositioning.value = 0;
       if (configPreferences.contentWidth.value < 990 || configPreferences.contentWidth.value > windowWidth) configPreferences.contentWidth.value = 990;
       if (configPreferences.messagingScale.value < 1 || configPreferences.messagingScale.value > 2) configPreferences.messagingScale = 1;
-      console.log('h');
+
       const postSelector = '[tabindex="-1"][data-id] article';
       const postHeaderTargetSelector = `${keyToCss('main')} > :not(${keyToCss('blogTimeline')}) [data-timeline]:not([data-timeline*='posts/'],${keyToCss('masonry')}) [tabindex='-1'][data-id] article:not(.__avatarFixed)`;
       const noteSelector = `[aria-label="${tr('Notification')}"],[aria-label="${tr('Unread Notification')}"]`;
@@ -321,7 +310,7 @@ const main = async function (nonce) {
       const carouselCellSelector = `[data-cell-id] ${keyToCss('tagCard')}, [data-cell-id] ${keyToCss('blogRecommendation')}, [data-cell-id] ${keyToCss('tagChicletLink')}`;
       const masonryNotesSelector = `[data-timeline]${keyToCss('masonry')} article ${keyToCss('formattedNoteCount')}`;
       const containerSelector = `${keyToCss('bluespaceLayout')} > ${keyToCss('container')}:not(${keyToCss('mainContentIs4ColumnMasonry')})`;
-      console.log('h');
+
       const tsKey = 'lastSeenNoTagPromptTsKey';
 
       const newNodes = [];
@@ -780,7 +769,7 @@ const main = async function (nonce) {
           }
         </style>
       `);
-      console.log('h');
+
       const untitledStrings = [
         'Untitled', // en
         'Sans titre', // fr
@@ -798,9 +787,8 @@ const main = async function (nonce) {
         'Tanpa judul', // id
         'शीर्षकहीन' // hi
       ];
-      
-      state = JSON.parse(window.___INITIAL_STATE___.textContent);
-      const userName = state.queries.queries[0].state.data.user.blog;
+      // const userName = state.queries.queries[0].state.data.user.blog;
+
 
       const hexToRgb = (hex = '') => {
         hex = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => {
@@ -957,16 +945,16 @@ const main = async function (nonce) {
           });
         });
       };
-      // const addUserPortrait = () => {
-      //   const bar = $(`${keyToCss('postColumn')} > ${keyToCss('bar')}`);
-      //   if (bar) {
-      //     const userAvatarWrapper = $str('<div class="__userAvatarWrapper"></div>');
-      //     bar.prepend(userAvatarWrapper);
-      //     if (pathname === 'blog') userAvatarWrapper.append(userAvatar(location.pathname.split('/')[2]));
-      //     else userAvatarWrapper.append(userAvatar(userName));
-      //     blogViewLink(userAvatarWrapper);
-      //   }
-      // };
+      const addUserPortrait = () => {
+        const bar = $(`${keyToCss('postColumn')} > ${keyToCss('bar')}`);
+        if (bar) {
+          const userAvatarWrapper = $str('<div class="__userAvatarWrapper"></div>');
+          bar.prepend(userAvatarWrapper);
+          if (pathname === 'blog') userAvatarWrapper.append(userAvatar(location.pathname.split('/')[2]));
+          // else userAvatarWrapper.append(userAvatar(userName));
+          blogViewLink(userAvatarWrapper);
+        }
+      };
 
       const fixMasonryNotes = noteCounts => {
         for (const noteCount of noteCounts) {
@@ -1964,7 +1952,7 @@ const main = async function (nonce) {
 
         const menu = configMenu(version, configPreferences);
         pathname = window.location.pathname.split('/')[1];
-        
+
         window.requestAnimationFrame(() => {
           document.head.appendChild(styleElement);
           followingAsDefault();
@@ -1981,6 +1969,7 @@ const main = async function (nonce) {
                 $('#__in').addEventListener('click', () => { $a('.__n').forEach(value => hide(value)); });
                 configPreferences.lastVersion = version;
                 updatePreferences();
+
               }
               /* if (configPreferences.showCta) {
                 $(keyToCss('sidebar')).insertBefore(cta, $(`${keyToCss('sidebar')} aside`));
@@ -1998,7 +1987,7 @@ const main = async function (nonce) {
         console.log('dashboard fixed!');
       };
 
-      console.info(JSON.parse(atob(state.obfuscatedFeatures)));
+      // console.info(JSON.parse(atob(state.obfuscatedFeatures)));
       console.info(featureSet);
 
       unfuck();

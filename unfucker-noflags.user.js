@@ -659,7 +659,7 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     const pathname = location.pathname.split("/")[1];
     
     const ownName = $("#account_subnav").find($(keyToCss("displayName"))).eq(0).text();
-    const blogs = JSON.parse(unsafeWindow.___INITIAL_STATE___.textContent).queries.queries[0].state.data.user.blogs;
+    // const blogs = state.queries.queries[0].state.data.user.blogs;
     let $navigationLinks = $(keyToCss("navigationLinks"));
     let $content = {};
     let $headerWrapper = $("<nav>", { class: keyToClasses("headerWrapper").join(" "), id: "__hw" });
@@ -763,34 +763,7 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       else { $("#settings_caret").css("transform", "rotate(0deg)") }
       $settingsSubmenu.toggle();
     });
-    for (let i = 0; i < blogs.length; ++i) {
-      let $blog = $blogs.eq(i);
-      let blog = blogs[i];
-      let $button = newCaret();
-      $blog.find(keyToCss("actionButtons")).append($button);
-      var $accountStats = accountStats(blog);
-      $accountStats.insertAfter($blog);
-      if (blog.isGroupChannel) {
-        var $members = $(`
-          <li>
-            <a href="/blog/${blog.name}/members" target="_blank">
-              <span>${tr("Members")}</span>
-            </a>
-          </li>
-        `);
-        $members.insertAfter($(`#__${blog.name}-activity`));
-      }
-      $accountStats.hide()
-      $button.on("click", function () {
-        if ($(keyToCss("accountStats")).eq(i + 1).is(":hidden")) {
-          $(this).css("transform", "rotate(180deg)");
-        }
-        else {
-          $(this).css("transform", "rotate(0deg)");
-        }
-        $(keyToCss("accountStats")).eq(i + 1).toggle();
-      });
-    }
+    
     $(`button[aria-label="${tr("Show Blog Statistics")}"`).eq(0).trigger("click");
     $(`[title="${tr("Settings")}"]`).hide();
     console.log("dashboard fixed!");
