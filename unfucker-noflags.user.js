@@ -319,100 +319,8 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     </style>
   `);
 
-  const newAvatar = (blog) => $(`
-    <div class="__stickyContainer" data-testid="sticky-avatar-container">
-      <div class="__avatarOuter">
-        <div class="__avatarWrapper" role="figure" aria-label="${tr("avatar")}">
-          <span data-testid="controlled-popover-wrapper" class="__targetWrapper">
-            <span class="__targetWrapper">
-              <a href="https://${blog}.tumblr.com/" title="${blog}" target="_blank" rel="noopener" role="link" class="__blogLink" tabindex="0">
-                <div class="__avatarInner" style="width: 64px; height: 64px;">
-                  <div class="__avatarWrapperInner">
-                    <div class="__placeholder" style="padding-bottom: 100%;">
-                      <img
-                      class="__avatarImage"
-                      src="https://api.tumblr.com/v2/blog/${blog}/avatar"
-                      sizes="64px" 
-                      alt="${tr("Avatar")}" 
-                      style="width: 64px; height: 64px;" 
-                      loading="eager">
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </span>
-          </span>
-        </div>
-      </div>
-    </div>
-  `);
-  const fixHeader = posts => {
-    for (const post of posts) {
-      let $post = $(post);
-      let $header = $post.find(`header${keyToCss("header")}`);
-      let parent = "";
-      if (location.pathname.split("/").includes("inbox")
-        || location.pathname.split("/").includes("messages")) {
-        parent = $header.find(keyToCss("blogLink")).eq(1).text()
-          || "anon";
-      } else {
-        parent = $header.find(keyToCss("blogLink")).eq(0).text()
-        || $post.find(`[aria-label="${tr("Reblog")}"]`)?.attr("href").split("/")[2];
-      }
-      if ($header.find(keyToCss("rebloggedFromName")).length) {
-        $header.find(keyToCss("reblogged")).hide();
-        let $rebloggedFrom = $header.find(keyToCss("rebloggedFromName"));
-        let $reblogIcon = $header.find(keyToCss("reblogIcon"));
-        $reblogIcon.css("margin-left", "2px");
-        $reblogIcon.insertBefore($rebloggedFrom);
-        $rebloggedFrom.css("margin-left", "5px");
-      } else if ($header.find(keyToCss("avatar")).length) {
-        $header.find(keyToCss("avatar")).hide();
-      } else {
-        $header.find(keyToCss("reblogged")).hide();
-        let $reblogIcon = $header.find(keyToCss("reblogIcon"));
-        $reblogIcon.css("margin-left", "2px");
-        $reblogIcon.appendTo($header.find(keyToCss("attribution")));
-        $header.find($(keyToCss("followButton"))).eq(0).hide();
-        let $label = $post.find(keyToCss("label")).eq(0).clone();
-        $label.insertAfter($reblogIcon);
-        $label.css({display: "inline", marginLeft: "5px"});
-        $label.find(keyToCss("attribution")).css("color", "rgba(var(--black),.65)");
-      }
-      if (parent !== "anon") $post.prepend(newAvatar(parent));
-      else {
-        $header.find(keyToCss("attribution")).css("font-weight", "bold");
-        $post.prepend(
-          $(`
-            <div class="__stickyContainer" data-testid="sticky-avatar-container">
-              <div class="__avatarOuter">
-                <figure class="__anonymous" aria-label="${tr("Anonymous avatar")}" style="width: 64px; height: 64px;"></figure>
-              </div>
-            </div>
-          `)
-        );
-      }
-    }
-  };
-  const sortPosts = () => {
-    const nodes = newNodes.splice(0);
-    if (nodes.length !== 0 && (nodes.some(node => node.matches(postSelector) || node.querySelector(postSelector) !== null))) {
-      const posts = [
-        ...nodes.filter(node => node.matches(postSelector)),
-        ...nodes.flatMap(node => [...node.querySelectorAll(postSelector)])
-      ].filter((value, index, array) => index === array.indexOf(value));
-      fixHeader(posts);
-    }
-    else return
-  };
-  const observer = new MutationObserver(mutations => {
-    const nodes = mutations
-      .flatMap(({ addedNodes }) => [...addedNodes])
-      .filter(node => node instanceof Element)
-      .filter(node => node.isConnected);
-    newNodes.push(...nodes);
-    sortPosts();
-  });
+
+ 
   const newSearch = () => $(`
     <div class="${keyToClasses("searchSidebarItem").join(" ")}" style="max-width: 550px; width: 100%;" >
       <div class="${keyToClasses("formContainer").join(" ")}">
@@ -542,105 +450,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       </li>
     </ul>
   `);
-  const newCaret = () => $(`
-    <button class="${keyToClasses("button")[0]}" aria-label="${tr("Show Blog Statistics")}">
-      <span class="${keyToClasses("buttonInner").join(" ")} ${keyToClasses("menuTarget").join(" ")}" style="transform: rotate(0deg); display: flex; transition: transform 200ms ease-in-out 0s;" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" role="presentation">
-          <use href="#managed-icon__caret-thin"></use>
-        </svg>
-      </span>
-    </button>
-  `);
-  const accountStats = blog => $(`
-    <ul class="${keyToClasses("accountStats").join(" ")}">
-      <li>
-        <a href="/blog/${blog.name}">
-          <span>${tr("Posts")}</span>
-          <span class="${keyToClasses("count")[3]}">${blog.posts ? blog.posts : ""}</span>
-        </a>
-      </li>
-      <li>
-        <a href="/blog/${blog.name}/followers">
-          <span>${tr("Followers")}</span>
-          <span class="${keyToClasses("count")[3]}">${blog.followers ? blog.followers : ""}</span>
-        </a>
-      </li>
-      <li id="__${blog.name}-activity">
-        <a href="/blog/${blog.name}/activity">
-          
-        </a>
-      </li>
-      <li>
-        <a href="/blog/${blog.name}/drafts">
-          <span>${tr("Drafts")}</span>
-          <span class="${keyToClasses("count")[3]}">${blog.drafts ? blog.drafts : ""}</span>
-        </a>
-      </li>
-      <li>
-        <a href="/blog/${blog.name}/queue">
-          <span>${tr("Queue")}</span>
-          <span class="${keyToClasses("count")[3]}">${blog.queue ? blog.queue : ""}</span>
-        </a>
-      </li>
-      <li>
-        <a href="/blog/${blog.name}/post-plus">
-          <span>${tr("Post+")}</span>
-        </a>
-      </li>
-      <li>
-        <a href="/blog/${blog.name}/blaze">
-          <span>${tr("Tumblr Blaze")}</span>
-        </a>
-      </li>
-      <li>
-        <a href="/settings/blog/${blog.name}">
-          <span>${tr("Blog settings")}</span>
-        </a>
-      </li>
-      <li>
-        <a href="/mega-editor/published/${blog.name}" target="_blank">
-          <span>${tr("Mass Post Editor")}</span>
-        </a>
-      </li>
-    </ul>
-  `);
-  const checkboxEvent = (id, value) => {
-    switch (id) {
-      case "__c1":
-      $(keyToCss("timelineHeader")).toggle(!value);
-      break;
-      case "__c2":
-      $(keyToCss("sidebarItem")).has(keyToCss("recommendedBlogs")).toggle(!value);
-      break;
-      case "__c3":
-      $(keyToCss("sidebarItem")).has(keyToCss("radar")).toggle(!value);
-      break;
-      case "__c4":
-      $(keyToCss("navItem")).has('use[href="#managed-icon__explore"]').toggle(!value);
-      break;
-      case "__c5":
-      $(keyToCss("navItem")).has('use[href="#managed-icon__shop"]').toggle(!value);
-      break;
-      case "__c6":
-      $(keyToCss("navItem")).has('use[href="#managed-icon__live-video"]')
-      .add($(keyToCss("navItem")).has('use[href="#managed-icon__coins"]'))
-      .add($(keyToCss("listTimelineObject")).has(keyToCss("liveMarqueeTitle")))
-      .toggle(!value);
-      break;
-      case "__c7":
-      $(keyToCss("navItem")).has('use[href="#managed-icon__earth"]').toggle(!value);
-      break;
-      case "__c8":
-      $(keyToCss("navItem")).has('use[href="#managed-icon__sparkle"]').toggle(!value);
-      break;
-      case "__c10":
-      value? observer.observe(target, { childList: true, subtree: true })
-      : observer.disconnect();
-      break;
-      default:
-      console.error("checkboxEvent: invalid id");
-    }
-  };
   const unfuck = async function () {
     if ($(keyToCss("headerWrapper")).length) { //initial status checks to determine whether to inject or not
       console.log("no need to unfuck");
@@ -657,9 +466,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     } else { console.log("unfucking dashboard...") };
 
     const pathname = location.pathname.split("/")[1];
-    
-    const ownName = $("#account_subnav").find($(keyToCss("displayName"))).eq(0).text();
-    // const blogs = state.queries.queries[0].state.data.user.blogs;
     let $navigationLinks = $(keyToCss("navigationLinks"));
     let $content = {};
     let $headerWrapper = $("<nav>", { class: keyToClasses("headerWrapper").join(" "), id: "__hw" });
@@ -672,39 +478,11 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     let $settings = newSettings();
     let $settingsSubmenu = settingsSubmenu();
     let $subnav = $("#account_subnav");
-    let $blogs = $(keyToCss("blogTile"));
     let $bar = $(`${keyToCss("postColumn")} > ${keyToCss("bar")}`);
-    let $timelineHeader = $(keyToCss("timelineHeader"));
-    let $navItems = $navigationLinks.children();
-    let $main = $(keyToCss("main"));
     let $bluespaceLayout = $(keyToCss("bluespaceLayout"));
     let $navSubHeader = $(keyToCss("navSubHeader"));
     let $tabsHeader = $(keyToCss("tabsHeader"));
-    let $ownAvatar = $(`
-      <div class="__avatarOuter" style="position: absolute; top: 0; left: -85px;">
-        <div class="__avatarWrapper" role="figure" aria-label="${tr("avatar")}">
-          <span data-testid="controlled-popover-wrapper" class="__targetWrapper">
-            <span class="__targetWrapper">
-              <a href="https://${ownName}.tumblr.com/" title="${ownName}" target="_blank" rel="noopener" role="link" class="blogLink" tabindex="0">
-                <div class="__avatarInner" style="width: 64px; height: 64px;">
-                  <div class="__avatarWrapperInner">
-                    <div class="__placeholder" style="padding-bottom: 100%;">
-                      <img
-                      class="__avatarImage"
-                      src="https://api.tumblr.com/v2/blog/${ownName}/avatar"
-                      sizes="64px" 
-                      alt="${tr("Avatar")}" 
-                      style="width: 64px; height: 64px;" 
-                      loading="eager">
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </span>
-          </span>
-        </div>
-      </div>
-    `);
+
 
     $(document).on("click", () => { //add popover functionality to account subnav
       if (!$(`${keyToCss("subNav")}:hover`).length
@@ -714,10 +492,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       }
     });
    
-    if (headerFixTarget()) {
-      fixHeader($(postSelector));
-      observer.observe(target, { childList: true, subtree: true });
-    } else observer.disconnect;
     if (matchPathname()) { //run on non-permalink pages
       $tabsHeader.insertAfter($bar);
       $content = $(keyToCss("main"));
@@ -742,7 +516,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     if (["search", "tagged"].includes(pathname)) {
       $content.css("max-width", "fit-content");
     };
-    $bar.prepend($ownAvatar);
     $bluespaceLayout.prepend($headerWrapper);
     $headerWrapper.append($header)
     $header.append($logoContainer);
