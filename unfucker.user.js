@@ -6,7 +6,7 @@
 // @match        https://www.tumblr.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tumblr.com
 // @downloadURL  https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker.user.js
-// @updateURL    https://raw.githubusercontent.com/epowertashton/dashboard-unfucker/main/unfucker.user.js
+// @updateURL    https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker.user.js
 // @require      https://code.jquery.com/jquery-3.6.4.min.js
 // @grant        none
 // @run-at       document-start
