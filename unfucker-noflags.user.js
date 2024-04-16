@@ -450,6 +450,105 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       </li>
     </ul>
   `);
+  const newCaret = () => $(`
+    <button class="${keyToClasses("button")[0]}" aria-label="${tr("Show Blog Statistics")}">
+      <span class="${keyToClasses("buttonInner").join(" ")} ${keyToClasses("menuTarget").join(" ")}" style="transform: rotate(0deg); display: flex; transition: transform 200ms ease-in-out 0s;" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" role="presentation">
+          <use href="#managed-icon__caret-thin"></use>
+        </svg>
+      </span>
+    </button>
+  `);
+  const accountStats = blog => $(`
+    <ul class="${keyToClasses("accountStats").join(" ")}">
+      <li>
+        <a href="/blog/${blog.name}">
+          <span>${tr("Posts")}</span>
+          <span class="${keyToClasses("count")[3]}">${blog.posts ? blog.posts : ""}</span>
+        </a>
+      </li>
+      <li>
+        <a href="/blog/${blog.name}/followers">
+          <span>${tr("Followers")}</span>
+          <span class="${keyToClasses("count")[3]}">${blog.followers ? blog.followers : ""}</span>
+        </a>
+      </li>
+      <li id="__${blog.name}-activity">
+        <a href="/blog/${blog.name}/activity">
+          
+        </a>
+      </li>
+      <li>
+        <a href="/blog/${blog.name}/drafts">
+          <span>${tr("Drafts")}</span>
+          <span class="${keyToClasses("count")[3]}">${blog.drafts ? blog.drafts : ""}</span>
+        </a>
+      </li>
+      <li>
+        <a href="/blog/${blog.name}/queue">
+          <span>${tr("Queue")}</span>
+          <span class="${keyToClasses("count")[3]}">${blog.queue ? blog.queue : ""}</span>
+        </a>
+      </li>
+      <li>
+        <a href="/blog/${blog.name}/post-plus">
+          <span>${tr("Post+")}</span>
+        </a>
+      </li>
+      <li>
+        <a href="/blog/${blog.name}/blaze">
+          <span>${tr("Tumblr Blaze")}</span>
+        </a>
+      </li>
+      <li>
+        <a href="/settings/blog/${blog.name}">
+          <span>${tr("Blog settings")}</span>
+        </a>
+      </li>
+      <li>
+        <a href="/mega-editor/published/${blog.name}" target="_blank">
+          <span>${tr("Mass Post Editor")}</span>
+        </a>
+      </li>
+    </ul>
+  `);
+  const checkboxEvent = (id, value) => {
+    switch (id) {
+      case "__c1":
+      $(keyToCss("timelineHeader")).toggle(!value);
+      break;
+      case "__c2":
+      $(keyToCss("sidebarItem")).has(keyToCss("recommendedBlogs")).toggle(!value);
+      break;
+      case "__c3":
+      $(keyToCss("sidebarItem")).has(keyToCss("radar")).toggle(!value);
+      break;
+      case "__c4":
+      $(keyToCss("navItem")).has('use[href="#managed-icon__explore"]').toggle(!value);
+      break;
+      case "__c5":
+      $(keyToCss("navItem")).has('use[href="#managed-icon__shop"]').toggle(!value);
+      break;
+      case "__c6":
+      $(keyToCss("navItem")).has('use[href="#managed-icon__live-video"]')
+      .add($(keyToCss("navItem")).has('use[href="#managed-icon__coins"]'))
+      .add($(keyToCss("listTimelineObject")).has(keyToCss("liveMarqueeTitle")))
+      .toggle(!value);
+      break;
+      case "__c7":
+      $(keyToCss("navItem")).has('use[href="#managed-icon__earth"]').toggle(!value);
+      break;
+      case "__c8":
+      $(keyToCss("navItem")).has('use[href="#managed-icon__sparkle"]').toggle(!value);
+      break;
+      case "__c10":
+      value? observer.observe(target, { childList: true, subtree: true })
+      : observer.disconnect();
+      break;
+      default:
+      console.error("checkboxEvent: invalid id");
+    }
+  };
   const unfuck = async function () {
     if ($(keyToCss("headerWrapper")).length) { //initial status checks to determine whether to inject or not
       console.log("no need to unfuck");
@@ -466,6 +565,10 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     } else { console.log("unfucking dashboard...") };
 
     const pathname = location.pathname.split("/")[1];
+    
+    userinfo = await unsafeWindow.tumblr.apiFetch(`/v2/user/info`);
+    const blogs = await userinfo.response.user.blogs;
+    console.log(blogs);
     let $navigationLinks = $(keyToCss("navigationLinks"));
     let $content = {};
     let $headerWrapper = $("<nav>", { class: keyToClasses("headerWrapper").join(" "), id: "__hw" });
@@ -478,7 +581,11 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
     let $settings = newSettings();
     let $settingsSubmenu = settingsSubmenu();
     let $subnav = $("#account_subnav");
+    let $blogs = $(keyToCss("blogTile"));
     let $bar = $(`${keyToCss("postColumn")} > ${keyToCss("bar")}`);
+    let $timelineHeader = $(keyToCss("timelineHeader"));
+    let $navItems = $navigationLinks.children();
+    let $main = $(keyToCss("main"));
     let $bluespaceLayout = $(keyToCss("bluespaceLayout"));
     let $navSubHeader = $(keyToCss("navSubHeader"));
     let $tabsHeader = $(keyToCss("tabsHeader"));
@@ -536,7 +643,34 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       else { $("#settings_caret").css("transform", "rotate(0deg)") }
       $settingsSubmenu.toggle();
     });
-    
+    for (let i = 0; i < blogs.length; ++i) {
+      let $blog = $blogs.eq(i);
+      let blog = blogs[i];
+      let $button = newCaret();
+      $blog.find(keyToCss("actionButtons")).append($button);
+      var $accountStats = accountStats(blog);
+      $accountStats.insertAfter($blog);
+      if (blog.isGroupChannel) {
+        var $members = $(`
+          <li>
+            <a href="/blog/${blog.name}/members" target="_blank">
+              <span>${tr("Members")}</span>
+            </a>
+          </li>
+        `);
+        $members.insertAfter($(`#__${blog.name}-activity`));
+      }
+      $accountStats.hide()
+      $button.on("click", function () {
+        if ($(keyToCss("accountStats")).eq(i + 1).is(":hidden")) {
+          $(this).css("transform", "rotate(180deg)");
+        }
+        else {
+          $(this).css("transform", "rotate(0deg)");
+        }
+        $(keyToCss("accountStats")).eq(i + 1).toggle();
+      });
+    }
     $(`button[aria-label="${tr("Show Blog Statistics")}"`).eq(0).trigger("click");
     $(`[title="${tr("Settings")}"]`).hide();
     console.log("dashboard fixed!");
