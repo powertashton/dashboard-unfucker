@@ -16,7 +16,7 @@
 const $ = window.jQuery;
 
 const main = async function (nonce) {
-  const version = '6.0.0';
+  const version = '6.0.1';
   const match = [
     '',
     'dashboard',
