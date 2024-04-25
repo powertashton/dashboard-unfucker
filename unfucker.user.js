@@ -2519,7 +2519,8 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       </li>
       <li id="__${blog.name}-activity">
         <a href="/blog/${blog.name}/activity">
-          
+          <span>${tr("Activity")}</span>
+          <span class="${keyToClasses("count")[3]}">${blog.activity ? blog.activity : ""}</span>
         </a>
       </li>
       <li>
