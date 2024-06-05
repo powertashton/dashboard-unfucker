@@ -2,13 +2,13 @@
 // @name         dashboard unfucker
 // @version      6.6.6
 // @description  no more shitty twitter ui for pc
-// @author       dragongirlsnout and powertasthon/soggiedsocks :3
+// @author       dragongirlsnout
 // @match        https://www.tumblr.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tumblr.com
-// @downloadURL  https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
-// @updateURL    https://raw.githubusercontent.com/enchanted-sword/dashboard-unfucker/main/unfucker.user.js
+// @downloadURL  https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker.user.js
+// @updateURL    https://raw.githubusercontent.com/powertashton/dashboard-unfucker/main/unfucker.user.js
 // @require      https://code.jquery.com/jquery-3.6.4.min.js
-// @grant        none
+// @grant        unsafeWindow
 // @run-at       document-start
 // ==/UserScript==
 
