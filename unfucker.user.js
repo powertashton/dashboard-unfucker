@@ -842,8 +842,10 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       let $blog = $blogs.eq(i);
       let blog = blogs[i];
       let $button = newCaret();
-      test = await unsafeWindow.tumblr.apiFetch(`/v2/blog/${blog.name}/notifications?unread=true`);
-      blog.notifications = test.response.notifications.filter(a => a.unread == true).length;
+      test = await unsafeWindow.tumblr.apiFetch(`/v2/blog/${blog.name}/activity/notes`);
+      console.log(test);
+      blog.notifications = test.response.newNotes;
+      console.log(blog.notifications);
       $blog.find(keyToCss("actionButtons")).append($button);
       var $accountStats = accountStats(blog);
       console.log(blog);
