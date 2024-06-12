@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         dashboard unfucker
-// @version      6.7.0
+// @version      6.8.0
 // @description  no more shitty twitter ui for pc
 // @author       dragongirlsnout and powertashton
 // @match        https://www.tumblr.com/*
@@ -13,6 +13,10 @@
 // ==/UserScript==
 
 /* globals tumblr */
+
+const version = "6.8.0";
+const type = "b"
+
 function GM_addStyle (cssStr) {
     var D               = document;
     var newNode         = D.createElement ('style');
@@ -25,6 +29,7 @@ GM_addStyle ( ` /*No Go ad-free today button*/
 .HOjIH {
     display: none;
 }
+
 
 @media (min-width: 990px) {
 
@@ -1181,13 +1186,21 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
         position: relative;
     }
 
+    .jpu7k.jDcIV.D0OOd.XnKJk {
+        visibility: visible!important;
+        background-color:RGB(var(--accent));
+        left: 12px;
+        top: -12px;
+
+    }
+
     .FA5JM .jDcIV:not(.SmqzX) {
-border: 2px solid RGB(var(--navy)) !important;
-border-style: none;
-min-width: 23px;
-height: 22px;
-    top: -9.5px;
-left: 13px;
+        border: 2px solid RGB(var(--navy)) !important;
+        border-style: none;
+        min-width: 23px;
+        height: 22px;
+        top: -9.5px;
+        left: 13px;
     }
 
 
@@ -1236,6 +1249,7 @@ left: 13px;
         max-width: 45px;
         border-radius: 3px;
         height: 32px;
+        background-color: RGB(var(--accent));
     }
 
     .jGgIg .ML6ef svg {
@@ -1437,8 +1451,7 @@ you may need to change it with other colour pallets)*/
 }
 
 }`);
-const version = "6.6.6";
-const type = "b"
+
 const match = [
   "",
   "dashboard",
@@ -1687,6 +1700,8 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
         ${keyToCss("timelineOptions")} { overflow-x: auto !important; }
         ${keyToCss('stickyContainer')} > ${keyToCss('avatar')} { top: calc(69px + var(--dashboard-tabs-header-height, 0px)) !important; }
         
+        
+
         ${keyToCss('container')}${keyToCss('mainContentIs4ColumnMasonry')} { margin: 0 auto !important; }
         ${keyToCss("bluespaceLayout")} > ${keyToCss("newDesktopLayout")} { margin-top: 32px; }
         ${keyToCss("reblogRedesignEnabled")} { border-radius: var(--border-radius-small) !important; }
