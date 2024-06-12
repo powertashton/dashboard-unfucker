@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         dashboard unfucker
-// @version      6.8.0
+// @version      6.8.1
 // @description  no more shitty twitter ui for pc
 // @author       dragongirlsnout and powertashton
 // @match        https://www.tumblr.com/*
@@ -14,7 +14,7 @@
 
 /* globals tumblr */
 
-const version = "6.8.0";
+const version = "6.8.1";
 const type = "b"
 
 function GM_addStyle (cssStr) {
@@ -425,8 +425,8 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
 
     .lUKCu .SAqxs .BG5X8[aria-selected=true] {
         border-radius: 0px;
-        color: RGB(var(--accent));
-        box-shadow: inset 0px -2px 0px RGB(var(--accent));
+        color: RGB(var(--deprecated-accent));
+        box-shadow: inset 0px -2px 0px RGB(var(--deprecated-accent));
         background-color: RGB(var(--white));
     }
 
@@ -1188,7 +1188,7 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
 
     .jpu7k.jDcIV.D0OOd.XnKJk {
         visibility: visible!important;
-        background-color:RGB(var(--accent));
+        background-color:RGB(var(--deprecated-accent));
         left: 12px;
         top: -12px;
 
@@ -1249,7 +1249,7 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
         max-width: 45px;
         border-radius: 3px;
         height: 32px;
-        background-color: RGB(var(--accent));
+        background-color: RGB(var(--deprecated-accent));
     }
 
     .jGgIg .ML6ef svg {
@@ -2223,9 +2223,10 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       let $blog = $blogs.eq(i);
       let blog = blogs[i];
       let $button = newCaret();
-      test = await unsafeWindow.tumblr.apiFetch(`/v2/blog/${blog.name}/activity/notes`);
+      test = await unsafeWindow.tumblr.apiFetch(`/v2/user/counts?&blog_notification_counts=true`);
+      
       console.log(test);
-      blog.notifications = test.response.newNotes;
+      blog.notifications = 0;
       console.log(blog.notifications);
       $blog.find(keyToCss("actionButtons")).append($button);
       var $accountStats = accountStats(blog);
