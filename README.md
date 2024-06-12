@@ -7,7 +7,7 @@ Unfucks the twitterification of tumblr's dashboard by reverting it to the old la
 ## Installation
 The script works with and is fully tested with Tampermonkey, Tampermonkey Beta, Greasemonkey, and Violentmonkey.
 - Install any one of the script injector extensions listed above.
-- Click on [unfucker.user.js](https://github.com/enchanted-sword/dashboard-unfucker/raw/main/unfucker.user.js) to install or update.
+- Click on [unfucker.user.js](https://github.com/powertashton/dashboard-unfucker/raw/main/unfucker.user.js) to install or update.
 - NOTE: if you are updating from a version that ends in "b" (the no-flags version), the script will be installed separately instead of overwriting the existing script because they have different `@name` properties. You should disable or delete the old version of the script, as having both enabled will cause unintended behaviour.
 
 
