@@ -43,6 +43,7 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
     .ZkG01 .h_Erh {
         z-index: 99 !important;
         position: fixed !important;
+        max-width:990px;
     }
 
     @media (min-width: 1161.3px) {
@@ -50,10 +51,10 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
         .N5wJr,
         .zmjaW {
             position: fixed !important;
-            left: 125px !important;
-            top: -5px !important;
+            left: left: 200px !important;
+            top: -4px !important;
             z-index: 99 !important;
-            width: 415px !important;
+            max-width: 415px !important;
         }
         .N5wJr.X7vaQ {
             left: 133px !important;
@@ -404,8 +405,9 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
     }
 
     /*Fixes Some of the changes to the Activity Menu*/
-    .ybmTG.ufrME > div.DxQ0f.AzqQv.P4LH6:has(.jBtpD) {
-        transform: translate3d(-82.8px, 49px, 0px) !important;
+    .DxQ0f {
+        position:absolute!important;;
+        top:32px!important;
     }
 
     .mCR4G a {
@@ -1363,14 +1365,13 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
         margin-bottom: 5px;
         padding: 0;
         top: 53px;
-        position: fixed;
+        position: relative;
         z-index: 1000;
         overflow-x: hidden;
         border-radius: 3px;
         max-height: calc(100vh - 88px);
         overflow-y: auto;
         box-shadow: 0 0 15px rgba(0, 0, 0, .5);
-        Right: 17px;
     }
 
     /*Changes the colour of the Menus (this is set to tumblr Original Blue 
@@ -1703,7 +1704,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
         
 
         ${keyToCss('container')}${keyToCss('mainContentIs4ColumnMasonry')} { margin: 0 auto !important; }
-        ${keyToCss("bluespaceLayout")} > ${keyToCss("newDesktopLayout")} { margin-top: 32px; }
         ${keyToCss("reblogRedesignEnabled")} { border-radius: var(--border-radius-small) !important; }
         .__stickyContainer {
           color: RGB(var(--white-on-dark));
@@ -2193,7 +2193,7 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       }
     } else { //permalink pages
       $content = $(`${keyToCss("mainContentWrapper")} ${keyToCss("container")}`);
-      $("#__h").append(newSearch());
+      // $("#__h").append(newSearch());
     };
     if (["search", "tagged"].includes(pathname)) {
       $content.css("max-width", "fit-content");
@@ -2223,15 +2223,21 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
       let $blog = $blogs.eq(i);
       let blog = blogs[i];
       let $button = newCaret();
-      test = await unsafeWindow.tumblr.apiFetch(`/v2/user/counts?&blog_notification_counts=true`);
-      
+      notecount = 0;
+      test = await unsafeWindow.tumblr.apiFetch(`/v2/blog/${blog.name}/notifications`);
       console.log(test);
-      blog.notifications = 0;
-      console.log(blog.notifications);
+      // if the last notification is unread
+      if (test.response.notifications[-1]){
+        while (test.response.notifications[-1].unread == true) {
+          notecount =+ test.response.notifications.length;
+          test = await unsafeWindow.tumblr.apiFetch(`/v2/blog/${blog.name}/notifications`);
+        }
+      }
+      notecount =+ test.response.notifications.filter(a => a.unread == true).length;
+      blog.notifications = notecount;
       $blog.find(keyToCss("actionButtons")).append($button);
       var $accountStats = accountStats(blog);
-      console.log(blog);
-      
+      console.log(blog)
       $accountStats.insertAfter($blog);
       if (blog.isGroupChannel) {
         var $members = $(`
