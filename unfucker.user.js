@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         dashboard unfucker
-// @version      6.8.1
+// @version      6.8.2
 // @description  no more shitty twitter ui for pc
 // @author       dragongirlsnout and powertashton
 // @match        https://www.tumblr.com/*
@@ -14,7 +14,7 @@
 
 /* globals tumblr */
 
-const version = "6.8.1";
+const version = "6.8.2";
 const type = "b"
 
 function GM_addStyle (cssStr) {
