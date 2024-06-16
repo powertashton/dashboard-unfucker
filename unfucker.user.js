@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         dashboard unfucker
-// @version      6.8.2
+// @version      6.8.3
 // @description  no more shitty twitter ui for pc
 // @author       dragongirlsnout and powertashton
 // @match        https://www.tumblr.com/*
@@ -14,7 +14,7 @@
 
 /* globals tumblr */
 
-const version = "6.8.2";
+const version = "6.8.3";
 const type = "b"
 
 function GM_addStyle (cssStr) {
@@ -45,14 +45,17 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
         position: fixed !important;
         max-width:990px;
     }
-
+    .gM9qK > .N5wJr {
+      padding-top:12px;
+      position:static!important;
+    }
     @media (min-width: 1161.3px) {
         /*Moves the search bar - Fullscreen + Sticky*/
-        .N5wJr,
+        :not(.gM9qK) > .N5wJr,
         .zmjaW {
             position: fixed !important;
-            left: left: 200px !important;
-            top: -4px !important;
+            left: 228px !important;
+            top: -2px !important;
             z-index: 99 !important;
             max-width: 415px !important;
         }
@@ -74,11 +77,11 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
 
     @media (max-width: 1161.3px) {
         /*Moves the search bar - Smallscreen + Sticky*/
-        .N5wJr,
+        :not(.gM9qK) > .N5wJr,
         .zmjaW {
             position: fixed !important;
-            left: 45px !important;
-            top: -5px !important;
+            left: 108px !important;
+            top: -2px !important;
             z-index: 99 !important;
             width: 280px !important;
         }
@@ -113,46 +116,43 @@ Unfortunately a fixed header is a bit buggy so remove at your own risk!*/
         left: 133px !important;
         width: 399px !important;
     }
-    
-
-    /*Sticky Header End*/
-    
-    
-    
 
 
+    .gM9qK {
+      position:absolute;
+    }
 
-@media (max-width: 1161.3px) {
+    @media (max-width: 1161.3px) {
     /*Reorders the Icons in the header*/
 
-/*COMMUNITIES UPDATE - REMOVE /* (around order) IF USING COMMUNITIES PAGES*/
+    /*COMMUNITIES UPDATE - REMOVE /* (around order) IF USING COMMUNITIES PAGES*/
 
-/*Communities*/
+    /*Communities*/
 
-.gM9qK > span.ZQMrc:nth-of-type(1) {
-/*order: 3 !important;*/
-}
-/*Activity*/
+    .gM9qK > span.ZQMrc:nth-of-type(1) {
+    /*order: 3 !important;*/
+    }
+    /*Activity*/
 
-.gM9qK > span.ZQMrc:nth-of-type(2) {
-/*order: 8 !important;*/
-}  
-/*Chat*/
+    .gM9qK > span.ZQMrc:nth-of-type(2) {
+    /*order: 8 !important;*/
+    }  
+    /*Chat*/
 
-.gM9qK > span.ZQMrc:nth-of-type(3) {
-/*order:7 !important;*/
-} 
-/*Accounts*/ 
-
-.gM9qK > span.ZQMrc:nth-of-type(4) {
-/*order: 15 !important;*/
-}
-/*shop*/ 
-
-.gM9qK > span.ZQMrc:nth-of-type(5) {
-/*order: 5 !important; */
+    .gM9qK > span.ZQMrc:nth-of-type(3) {
+    /*order:7 !important;*/
     } 
-}
+    /*Accounts*/ 
+
+    .gM9qK > span.ZQMrc:nth-of-type(4) {
+    /*order: 15 !important;*/
+    }
+    /*shop*/ 
+
+    .gM9qK > span.ZQMrc:nth-of-type(5) {
+    /*order: 5 !important; */
+        } 
+    }
     
     /*Accounts*/
     ul li.g8SYn {
@@ -942,8 +942,6 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
         /*Moves the search bar - Fullscreen + No Sticky*/
         .N5wJr,
         .zmjaW {
-            position: absolute;
-            top: -79px;
             z-index: 99;
             right: 46vw;
             width: 415px;
@@ -954,9 +952,6 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
         /*Moves the search bar - Smallscreen + No Sticky*/
         .N5wJr,
         .zmjaW {
-            position: absolute;
-            left: -645px;
-            top: -79px;
             z-index: 99;
             width: 280px;
         }
@@ -1109,21 +1104,25 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
     .FA5JM {
         width: 100%;
         max-width: 100%;
+        grid-template-columns: 1fr auto;
+        overflow: visible;
+        display: grid!important;
     }
 
-
+    .FA5JM .FnmoN {
+      overflow: visible;
+    }
     /*Positions and organises the buttons*/
     .FA5JM .NkkDk .gM9qK {
         margin: 0;
         padding: 0;
         display: grid;
-        grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+        grid-template-columns: 1fr 10fr  auto auto auto auto auto auto auto auto auto ;
         position: absolute;
         z-index: 90;
-        right: 80px;
         justify-content: end;
         align-items: center;
-        justify-items: end;
+        justify-items: start;
         align-content: center;
         width: 100%;
     }
@@ -1166,10 +1165,8 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
 
     .jGgIg {
         border-top: none;
-        display: flex;
         top: 0;
-        position: absolute;
-        padding: 10px 16px 12px;
+        padding: 0;
         justify-content: flex-end;
         height: 54px;
         align-content: center;
@@ -1217,37 +1214,22 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
     }
 
 
-    @media (max-width: 1162px) {
+   
         /*Moves the Tumblr Logo*/
         .Gav7q {
-            justify-content: center;
-            padding: 0px;
+            justify-content: end;
             display: flex;
-            left: 96px;
-            position: absolute;
-            padding-bottom: 2px;
+            padding:0;
         }
-    }
+    
 
-    @media (min-width: 1162px) {
-        /*Moves the Tumblr Logo*/
-        .Gav7q {
-            justify-content: center;
-            padding: 0px;
-            display: flex;
-            position: absolute;
-            left: 100px;
-        }
-    }
 
     /*Resizes the create a post button*/
     .jGgIg .ML6ef {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 18px;
         font-size: 0!important;
-        margin-right: 2px;
         max-width: 45px;
         border-radius: 3px;
         height: 32px;
@@ -1282,7 +1264,6 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
         line-height: 1.5;
         display: flex;
         flex-direction: row-reverse;
-        position: absolute;
     }
 
     #account_subnav > li:nth-child(1) {
@@ -1302,8 +1283,6 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
     #account_subnav > li:nth-child(3) > div > span.ZC1wz > button > span:before {
         visibility: visible;
         content: "Account";
-        position: absolute;
-        left: 10px;
     }
 
     #account_subnav > li:nth-child(4) > div > span.ZC1wz > button > span {
@@ -1344,6 +1323,9 @@ main > div.j8ha0 > div.zAlrA > .rZlUD > .So6RQ.YSitt > .ge_yK > .FtjPK > .BjErQ 
 
     #account_subnav.jL4Qq {
         width: 240px;
+        position:absolute!important;
+        top: 46px;
+        right: 0;
     }
 
 
@@ -1383,7 +1365,19 @@ you may need to change it with other colour pallets)*/
     .XstzY .kbIQf li a {
         color: inherit !important;
     }
-
+        #account_subnav {
+          background: RGB(var(--white));
+          color: RGB(var(--black));
+          max-height: 90vh;
+          width: 240px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          overscroll-behavior: none;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(var(--black),.4)rgba(var(--white),.1);
+          border-radius: var(--border-radius-small);
+          box-shadow: 0 0 15px rgba(0,0,0,.5);
+        }
     .KXYTk .fTJAC,
     .IYrO9 .jF6A2,
     .XstzY .kbIQf li a .dTeP6 {
@@ -1597,21 +1591,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
           left: 0;
           pointer-events: none;
         }
-        #account_subnav {
-          background: RGB(var(--white));
-          color: RGB(var(--black));
-          max-height: 90vh;
-          width: 240px;
-          overflow-y: auto;
-          overflow-x: hidden;
-          overscroll-behavior: none;
-          scrollbar-width: thin;
-          scrollbar-color: rgba(var(--black),.4)rgba(var(--white),.1);
-          position: fixed;
-          top: 48px;
-          border-radius: var(--border-radius-small);
-          box-shadow: 0 0 15px rgba(0,0,0,.5);
-        }
         ${keyToCss('subNav')} a,
         ${keyToCss('subNav')} ${keyToCss('childWrapper')},
         ${keyToCss('subNav')} ${keyToCss('blogName')} { color: RGB(var(--black)) !important; }
@@ -1676,17 +1655,6 @@ getUtilities().then(({ keyToClasses, keyToCss, tr }) => {
         ${keyToCss('navigationLinks')} > ${keyToCss('targetPopoverWrapper')} ${keyToCss('navLink')} {
           padding: 0;
           gap: 0;
-          justify-content: center;
-        }
-        ${keyToCss('mainContentWrapper')} {
-          flex-basis: unset !important;
-          width: 100%;
-          justify-content: center !important;
-        }
-        ${keyToCss('mainContentWrapper')} > ${keyToCss('hasBorder')} {
-          max-width: unset !important;
-          width: 100%;
-          display: flex;
           justify-content: center;
         }
         ${keyToCss('main')} {
